@@ -12,6 +12,6 @@
  "examples": [
  "example/*.c"
  ],
- "exclude": 25.6
- "add": false
+ "exclude": false,
+ "add": 26.5
 }
