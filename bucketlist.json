@@ -1,0 +1,543 @@
+{
+    "name": "Gildong",
+    "faith": [
+        {
+            "what": "이스라엘 성지순례를 가고싶다.",
+            "importance": "★★★☆☆",
+            "done": "no"
+        },
+        {
+            "what": "성경 일독을 하고싶다.",
+            "importance": "★★★★★",
+            "done": "no"
+        },
+        {
+            "what": "방학기간동안 모교회에서 진행하는 단기선교에 함께하고싶다.",
+            "importance": "★★★★☆",
+            "done": "no"
+        },
+        {
+            "what": "교회에 다니지 않는 나의 친구를 전도하고싶다.",
+            "importance": "★★★★★",
+            "done": "yes"
+        },
+        {
+            "what": "하나님을 진정으로 간구하는 시간을 갖기 위해 금식기도를 하고싶다.",
+            "importance": "★☆☆☆☆",
+            "done": "no"
+        },
+        {
+            "what": "교회학교 교사해보기",
+            "importance": "★★★★☆",
+            "done": "yes"
+        },
+        {
+            "what": "요단강 가보기",
+            "importance": "★★★★☆",
+            "done": "no"
+        },
+        {
+            "what": "공동체 순장해보기",
+            "importance": "★★★★★",
+            "done": "yes"
+        },
+        {
+            "what": "4복음서 필사해보기",
+            "importance": "★★★☆☆",
+            "done": "no"
+        },
+        {
+            "what": "온전한 십일조하기",
+            "importance": "★★★★★",
+            "done": "no"
+        },
+        {
+            "what": "감사일기 써보기",
+            "importance": "★★★☆☆",
+            "done": "no"
+        },
+        {
+            "what": "참 그리스도인이라는 소리 들어보기",
+            "importance": "★★★★☆",
+            "done": "no"
+        },
+        {
+            "what": "선교사님 후원하기",
+            "importance": "★★☆☆☆",
+            "done": "yes"
+        },
+        {
+            "what": "찬양인도 해보기",
+            "importance": "★★★★☆",
+            "done": "no"
+        },
+        {
+            "what": "믿음의 배우자 만나기",
+            "importance": "★★★★★",
+            "done": "no"
+        },
+        {
+            "what": "교회에서 가족특송 하기",
+            "importance": "★★★☆☆",
+            "done": "no"
+        },
+        {
+            "what": "중동지역 선교가기",
+            "importance": "★★★★★",
+            "done": "no"
+        },
+        {
+            "what": "온가족 전도하기",
+            "importance": "★★★☆☆",
+            "done": "no"
+        },
+        {
+            "what": "새벽기도 한달동안 가기",
+            "importance": "★★★★☆",
+            "done": "no"
+        }
+    ],
+    "experience": [
+        {
+            "what": "친한 친구들과 집이 아닌 곳에서 밤새 놀고싶다.",
+            "importance": "★★★★☆",
+            "done": "yes"
+        },
+        {
+            "what": "별이 무수히 많이 수놓인 밤 하늘을 바닥에 누워서 보고싶다.",
+            "importance": "★★☆☆☆",
+            "done": "no"
+        },
+        {
+            "what": "하루에 영화관에서 영화 2편을 보고싶다.",
+            "importance": "★★★★★",
+            "done": "no"
+        },
+        {
+            "what": "티비 프로그램 방청에 가고싶다.",
+            "importance": "★★☆☆☆",
+            "done": "yes"
+        },
+        {
+            "what": "해외에서 신년/연말/생일을 맞고싶다.",
+            "importance": "★★★★★",
+            "done": "no"
+        },
+        {
+            "what": "패러글라이딩 타보기.",
+            "importance": "★★★★☆",
+            "done": "yes"
+        },
+        {
+            "what": "스카이다이빙 하기.",
+            "importance": "★★★☆☆",
+            "done": "no"
+        },
+        {
+            "what": "아이슬란드에서 오로라보기",
+            "importance": "★★★★★",
+            "done": "no"
+        },
+        {
+            "what": "백야 경험해보기.",
+            "importance": "★★★☆☆",
+            "done": "no"
+        },
+        {
+            "what": "무중력 경험해보기",
+            "importance": "★★★☆☆",
+            "done": "no"
+        },
+        {
+            "what": "모든 대륙 가보기.",
+            "importance": "★★★★☆",
+            "done": "no"
+        },
+        {
+            "what": "부모님 내 돈으로 여행보내드리기.",
+            "importance": "★★★★★",
+            "done": "no"
+        },
+        {
+            "what": "바다가 앞에 있는 카페 차리기.",
+            "importance": "★★★☆☆",
+            "done": "no"
+        },
+        {
+            "what": "해외에서 한달 살기 해보기.",
+            "importance": "★★★☆☆",
+            "done": "no"
+        },
+        {
+            "what": "혼자 해외여행 가보기.",
+            "importance": "★★★★☆",
+            "done": "no"
+        },
+        {
+            "what": "혼자 살아보기.",
+            "importance": "★★★★★",
+            "done": "yes"
+        },
+        {
+            "what": "크루즈 여행 가기.",
+            "importance": "★★★★☆",
+            "done": "no"
+        },
+        {
+            "what": "해외에서 한달 살기 해보기.",
+            "importance": "★★★☆☆",
+            "done": "no"
+        },
+        {
+            "what": "사랑의 마라톤 완주하기",
+            "importance": "★★★☆☆",
+            "done": "no"
+        },
+        {
+            "what": "유니세프 참가하기.",
+            "importance": "★★★★☆",
+            "done": "no"
+        },
+        {
+            "what": "대기업 취업하기",
+            "importance": "★★★★★",
+            "done": "no"
+        },
+        {
+            "what": "외제차 드라이버 되기",
+            "importance": "★★★★★",
+            "done": "no"
+        },
+        {
+            "what": "부모님하고 해외 효도여행 가기",
+            "importance": "★★★★★",
+            "done": "no"
+        }
+    ],
+    "book": [
+        {
+            "what": "스크루테이프의 편지",
+            "importance": "★★★☆☆",
+            "done": "yes"
+        },
+        {
+            "what": "아주 작은 습관의 힘",
+            "importance": "★☆☆☆☆",
+            "done": "no"
+        },
+        {
+            "what": "용서의 미학",
+            "importance": "★★★☆☆",
+            "done": "no"
+        },
+        {
+            "what": "쇼코의 미소",
+            "importance": "★★★★☆",
+            "done": "no"
+        },
+        {
+            "what": "비행운",
+            "importance": "★☆☆☆☆",
+            "done": "no"
+        },
+        {
+            "what": "언어의 온도",
+            "importance": "★★★★☆",
+            "done": "yes"
+        },
+        {
+            "what": "모모",
+            "importance": "★★★☆☆",
+            "done": "yes"
+        },
+        {
+            "what": "세계사라는 참을 수 없는 농담",
+            "importance": "★★★☆☆",
+            "done": "no"
+        },
+        {
+            "what": "1984",
+            "importance": "★★★★★",
+            "done": "no"
+        },
+        {
+            "what": "아몬드",
+            "importance": "★★★★☆",
+            "done": "yes"
+        },
+        {
+            "what": "인간실격",
+            "importance": "★★★☆☆",
+            "done": "no"
+        },
+        {
+            "what": "그리고 아무도 없었다",
+            "importance": "★★★★★",
+            "done": "no"
+        },
+        {
+            "what": "데미안",
+            "importance": "★★★★★",
+            "done": "yes"
+        },
+        {
+            "what": "아가미",
+            "importance": "★★★★☆",
+            "done": "yes"
+        },
+        {
+            "what": "진주귀고리소녀",
+            "importance": "★★★☆☆",
+            "done": "no"
+        },
+        {
+            "what": "제노사이드",
+            "importance": "★★★☆☆",
+            "done": "no"
+        },
+        {
+            "what": "벚꽃지는 계절에 그대를",
+            "importance": "★★☆☆☆",
+            "done": "no"
+        },
+        {
+            "what": "7년의 밤",
+            "importance": "★★★★☆",
+            "done": "yes"
+        },
+        {
+            "what": "대성당",
+            "importance": "★★★★☆",
+            "done": "no"
+        },
+        {
+            "what": "밀실 살인게임",
+            "importance": "★★☆☆☆",
+            "done": "yes"
+        },
+        {
+            "what": "개미",
+            "importance": "★★☆☆☆",
+            "done": "yes"
+        },
+        {
+            "what": "레미제라블",
+            "importance": "★★☆☆☆",
+            "done": "yes"
+        },
+        {
+            "what": "해리포터 전 시리즈",
+            "importance": "★★★☆☆",
+            "done": "yes"
+        },
+        {
+            "what": "노인과 바다",
+            "importance": "★☆☆☆☆",
+            "done": "yes"
+        },
+        {
+            "what": "코스모스",
+            "importance": "★★★☆☆",
+            "done": "no"
+        }
+    ],
+    "travel": [
+        {
+            "what": "캐나다",
+            "importance": "★★★★☆",
+            "done": "yes"
+        },
+        {
+            "what": "미국 시애틀",
+            "importance": "★★★☆☆",
+            "done": "yes"
+        },
+        {
+            "what": "호주",
+            "importance": "★★☆☆☆",
+            "done": "no"
+        },
+        {
+            "what": "태국 푸켓",
+            "importance": "★★★☆☆",
+            "done": "yes"
+        },
+        {
+            "what": "헝가리",
+            "importance": "★☆☆☆☆",
+            "done": "no"
+        },
+        {
+            "what": "포르투칼",
+            "importance": "★★★★☆",
+            "done": "no"
+        },
+        {
+            "what": "뉴질랜드",
+            "importance": "★☆☆☆☆",
+            "done": "no"
+        },
+        {
+            "what": "싱가포르",
+            "importance": "★★★★☆",
+            "done": "yes"
+        },
+        {
+            "what": "베트남",
+            "importance": "★★★☆☆",
+            "done": "yes"
+        },
+        {
+            "what": "하와이",
+            "importance": "★★★★★",
+            "done": "no"
+        },
+        {
+            "what": "몰디브",
+            "importance": "★★★★★",
+            "done": "no"
+        },
+        {
+            "what": "영국",
+            "importance": "★★★☆☆",
+            "done": "no"
+        },
+        {
+            "what": "프랑스",
+            "importance": "★★☆☆☆",
+            "done": "no"
+        },
+        {
+            "what": "일본 도톤보리",
+            "importance": "★★★☆☆",
+            "done": "yes"
+        },
+        {
+            "what": "뉴욕 타임스퀘어",
+            "importance": "★★★★☆",
+            "done": "no"
+        },
+        {
+            "what": "홍콩 하버시티",
+            "importance": "★★★★☆",
+            "done": "no"
+        },
+    ],
+    "food": [
+        {
+            "what": "스페인 정통 빠에야",
+            "importance": "★★★★★",
+            "done": "no"
+        },
+        {
+            "what": "뇨끼",
+            "importance": "★★★★☆",
+            "done": "no"
+        },
+        {
+            "what": "탕후루",
+            "importance": "★★☆☆☆",
+            "done": "yes"
+        },
+        {
+            "what": "베이징덕",
+            "importance": "★☆☆☆☆",
+            "done": "no"
+        },
+        {
+            "what": "이탈리아 수제 젤라또",
+            "importance": "★★★★★",
+            "done": "no"
+        },
+        {
+            "what": "미슐렝 5스타가 만든 초밥",
+            "importance": "★★★☆☆",
+            "done": "no"
+        },
+        {
+            "what": "감자전",
+            "importance": "★★★★☆",
+            "done": "yes"
+        },
+        {
+            "what": "케비어",
+            "importance": "★★★☆☆",
+            "done": "no"
+        },
+        {
+            "what": "수플레 팬케이크",
+            "importance": "★★★★★",
+            "done": "yes"
+        },
+        {
+            "what": "투썸 홀케이크",
+            "importance": "★★★★☆",
+            "done": "yes"
+        },
+        {
+            "what": "밀푀유 나베",
+            "importance": "★★★★☆",
+            "done": "yes"
+        },
+        {
+            "what": "뚱카롱",
+            "importance": "★★★☆☆",
+            "done": "yes"
+        },
+        {
+            "what": "치즈 퐁듀",
+            "importance": "★★★☆☆",
+            "done": "yes"
+        },
+        {
+            "what": "푸아그라",
+            "importance": "★☆☆☆☆",
+            "done": "no"
+        },
+        {
+            "what": "당고",
+            "importance": "★★★☆☆",
+            "done": "yes"
+        },
+        {
+            "what": "히쯔마부시",
+            "importance": "★★★★★",
+            "done": "yes"
+        },
+        {
+            "what": "이탈리아 정통 라자냐",
+            "importance": "★★★★★",
+            "done": "no"
+        },
+        {
+            "what": "10만원짜리 고급 한정식",
+            "importance": "★★★★☆",
+            "done": "no"
+        },
+        {
+            "what": "랍스타 코스요리",
+            "importance": "★★★☆☆",
+            "done": "no"
+        },
+        {
+            "what": "디진다 돈까스",
+            "importance": "★★★☆☆",
+            "done": "no"
+        },
+        {
+            "what": "에스카르고",
+            "importance": "★★★☆☆",
+            "done": "no"
+        },
+        {
+            "what": "1등급 와규",
+            "importance": "★★★☆☆",
+            "done": "no"
+        },
+        {
+            "what": "슈바인학센",
+            "importance": "★★★★☆",
+            "done": "no"
+        },
+    ]
+}
