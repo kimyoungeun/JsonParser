@@ -1,0 +1,158 @@
+[0] {
+ "BASIC COFFEE":
+ [
+  {
+   "name":"CAFE TEA",
+   "price":5.50
+  },
+  {
+   "name":"CAPPUCCINO",
+   "price":6.50
+  },
+  {
+   "name":"ESPRESSO",
+   "price":6.75
+  },
+  {
+   "name":"CAFE MOCHA",
+   "price":6.75
+  },
+  {
+   "name":"CAFE CHAI",
+   "price":5.50
+  }
+ ],
+ "LATTE & MACCHIATO":
+ [
+  {
+   "name":"CAFE LATTE",
+   "price":6.50
+  },
+  {
+   "name":"VANILLA BEAN LATTE",
+   "price":7.25
+  },
+  {
+   "name":"ACAI & BERRY LATTE",
+   "price":7.50
+  },
+  {
+   "name":"MATCHA MACCHIATO",
+   "price":8.00
+  }
+ ]
+} (size=2, 0~511, OBJECT)
+[1] BASIC COFFEE (size=1, 4~16, STRING)
+[2] [
+  {
+   "name":"CAFE TEA",
+   "price":5.50
+  },
+  {
+   "name":"CAPPUCCINO",
+   "price":6.50
+  },
+  {
+   "name":"ESPRESSO",
+   "price":6.75
+  },
+  {
+   "name":"CAFE MOCHA",
+   "price":6.75
+  },
+  {
+   "name":"CAFE CHAI",
+   "price":5.50
+  }
+ ] (size=5, 20~263, ARRAY)
+[3] {
+   "name":"CAFE TEA",
+   "price":5.50
+  } (size=2, 24~67, OBJECT)
+[4] name (size=1, 30~34, STRING)
+[5] CAFE TEA (size=0, 37~45, STRING)
+[6] price (size=1, 52~57, STRING)
+[7] 5.50 (size=0, 59~63, PRIMITIVE)
+[8] {
+   "name":"CAPPUCCINO",
+   "price":6.50
+  } (size=2, 71~116, OBJECT)
+[9] name (size=1, 77~81, STRING)
+[10] CAPPUCCINO (size=0, 84~94, STRING)
+[11] price (size=1, 101~106, STRING)
+[12] 6.50 (size=0, 108~112, PRIMITIVE)
+[13] {
+   "name":"ESPRESSO",
+   "price":6.75
+  } (size=2, 120~163, OBJECT)
+[14] name (size=1, 126~130, STRING)
+[15] ESPRESSO (size=0, 133~141, STRING)
+[16] price (size=1, 148~153, STRING)
+[17] 6.75 (size=0, 155~159, PRIMITIVE)
+[18] {
+   "name":"CAFE MOCHA",
+   "price":6.75
+  } (size=2, 167~212, OBJECT)
+[19] name (size=1, 173~177, STRING)
+[20] CAFE MOCHA (size=0, 180~190, STRING)
+[21] price (size=1, 197~202, STRING)
+[22] 6.75 (size=0, 204~208, PRIMITIVE)
+[23] {
+   "name":"CAFE CHAI",
+   "price":5.50
+  } (size=2, 216~260, OBJECT)
+[24] name (size=1, 222~226, STRING)
+[25] CAFE CHAI (size=0, 229~238, STRING)
+[26] price (size=1, 245~250, STRING)
+[27] 5.50 (size=0, 252~256, PRIMITIVE)
+[28] LATTE & MACCHIATO (size=1, 267~284, STRING)
+[29] [
+  {
+   "name":"CAFE LATTE",
+   "price":6.50
+  },
+  {
+   "name":"VANILLA BEAN LATTE",
+   "price":7.25
+  },
+  {
+   "name":"ACAI & BERRY LATTE",
+   "price":7.50
+  },
+  {
+   "name":"MATCHA MACCHIATO",
+   "price":8.00
+  }
+ ] (size=4, 288~509, ARRAY)
+[30] {
+   "name":"CAFE LATTE",
+   "price":6.50
+  } (size=2, 292~337, OBJECT)
+[31] name (size=1, 298~302, STRING)
+[32] CAFE LATTE (size=0, 305~315, STRING)
+[33] price (size=1, 322~327, STRING)
+[34] 6.50 (size=0, 329~333, PRIMITIVE)
+[35] {
+   "name":"VANILLA BEAN LATTE",
+   "price":7.25
+  } (size=2, 341~394, OBJECT)
+[36] name (size=1, 347~351, STRING)
+[37] VANILLA BEAN LATTE (size=0, 354~372, STRING)
+[38] price (size=1, 379~384, STRING)
+[39] 7.25 (size=0, 386~390, PRIMITIVE)
+[40] {
+   "name":"ACAI & BERRY LATTE",
+   "price":7.50
+  } (size=2, 398~451, OBJECT)
+[41] name (size=1, 404~408, STRING)
+[42] ACAI & BERRY LATTE (size=0, 411~429, STRING)
+[43] price (size=1, 436~441, STRING)
+[44] 7.50 (size=0, 443~447, PRIMITIVE)
+[45] {
+   "name":"MATCHA MACCHIATO",
+   "price":8.00
+  } (size=2, 455~506, OBJECT)
+[46] name (size=1, 461~465, STRING)
+[47] MATCHA MACCHIATO (size=0, 468~484, STRING)
+[48] price (size=1, 491~496, STRING)
+[49] 8.00 (size=0, 498~502, PRIMITIVE)

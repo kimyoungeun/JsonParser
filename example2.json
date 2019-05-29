@@ -1,17 +1,44 @@
-{ 
- "name": "jsmn",
- "keywords": "json",
- "description": "Minimalistic JSON parser/tokenizer in C. It can be easily integrated into resource-limited or embedded projects", 
- "repository":
- { 
- "type": true,
- "url": "https://github.com/zserge/jsmn.git"
- },
- "frameworks": "*",
- "platform": "*",
- "examples": [
- "example/*.c"
+{
+ "BASIC COFFEE":
+ [
+  {
+   "name":"CAFE TEA",
+   "price":5.50
+  },
+  {
+   "name":"CAPPUCCINO",
+   "price":6.50
+  },
+  {
+   "name":"ESPRESSO",
+   "price":6.75
+  },
+  {
+   "name":"CAFE MOCHA",
+   "price":6.75
+  },
+  {
+   "name":"CAFE CHAI",
+   "price":5.50
+  }
  ],
- "exclude": false,
- "add": 26.5
+ "LATTE & MACCHIATO":
+ [
+  {
+   "name":"CAFE LATTE",
+   "price":6.50
+  },
+  {
+   "name":"VANILLA BEAN LATTE",
+   "price":7.25
+  },
+  {
+   "name":"ACAI & BERRY LATTE",
+   "price":7.50
+  },
+  {
+   "name":"MATCHA MACCHIATO",
+   "price":8.00
+  }
+ ]
 }

@@ -25,6 +25,7 @@ typedef struct _JSON{
 
 void array_parse(char*, JSON*, int*, int*); //array parsing function
 void object_parse(char*, JSON*, int*, int*); //object parsing function
+void categoryPrint(JSON *json, char category[10]); //category 종류대로 print function
 
 char* readfile(char* filename, int* filesize)
 {
@@ -328,6 +329,27 @@ int main(int argc, char** argv)
     JSON json = {0, };
     json_parse(doc, filesize, &json, &totalcnt);
     printResult(&json, totalcnt);
+    
+    char category[10];
+    printf("당신이 원하는 category는 무엇입니까? 입력하세요:");
+    scanf("%s", category);
+    categoryPrint(&json, category);
+    
     freeJson(&json, totalcnt);
     return 0;
+}
+
+void categoryPrint(JSON *json,char category[10]){
+    if(!strcmp(category, "faith"))
+       printf("%s\n",json->tokens[4].string);
+    else if(!strcmp(category, "experience"))
+        printf("%s\n",json->tokens[139].string);
+    else if(!strcmp(category, "book"))
+        printf("%s\n",json->tokens[302].string);
+    else if(!strcmp(category, "travel"))
+        printf("%s\n",json->tokens[479].string);
+    else if(!strcmp(category, "food"))
+        printf("%s\n",json->tokens[593].string);
+    else
+        printf("입력하신 category의 list가 없습니다.\n");
 }

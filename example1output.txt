@@ -1,0 +1,43 @@
+[0] {
+  "name": "jsmn",
+  "keywords": "json",
+  "description": "Minimalistic JSON parser/tokenizer in C. It can be easily integrated into resource-limited or embedded projects",
+  "repository":
+  {
+    "type": "git",
+    "url": "https://github.com/zserge/jsmn.git"
+  },
+  "frameworks": "*",
+  "platforms": "*",
+  "examples": [
+    "example/*.c"
+  ],
+  "exclude": "test"
+} (size=8, 0~367, OBJECT)
+[1] name (size=1, 5~9, STRING)
+[2] jsmn (size=0, 13~17, STRING)
+[3] keywords (size=1, 23~31, STRING)
+[4] json (size=0, 35~39, STRING)
+[5] description (size=1, 45~56, STRING)
+[6] Minimalistic JSON parser/tokenizer in C. It can be easily integrated into resource-limited or embedded projects (size=0, 60~171, STRING)
+[7] repository (size=1, 177~187, STRING)
+[8] {
+    "type": "git",
+    "url": "https://github.com/zserge/jsmn.git"
+  } (size=2, 192~264, OBJECT)
+[9] type (size=1, 199~203, STRING)
+[10] git (size=0, 207~210, STRING)
+[11] url (size=1, 218~221, STRING)
+[12] https://github.com/zserge/jsmn.git (size=0, 225~259, STRING)
+[13] frameworks (size=1, 269~279, STRING)
+[14] * (size=0, 283~284, STRING)
+[15] platforms (size=1, 290~299, STRING)
+[16] * (size=0, 303~304, STRING)
+[17] examples (size=1, 310~318, STRING)
+[18] [
+    "example/*.c"
+  ] (size=1, 321~344, ARRAY)
+[19] example/*.c (size=0, 328~339, STRING)
+[20] exclude (size=1, 349~356, STRING)
+[21] test (size=0, 360~364, STRING)
+
