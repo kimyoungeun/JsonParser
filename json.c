@@ -23,8 +23,12 @@ typedef struct _JSON{
     tok_t tokens[TOKEN_COUNT];
 } JSON;
 
+char* readfile(char* filename, int* filesize); //read file name, contents
 void array_parse(char*, JSON*, int*, int*); //array parsing function
 void object_parse(char*, JSON*, int*, int*); //object parsing function
+void json_parse(char *doc, int size, JSON *json, int *b_cnt); //json parsing function
+void freeJson(JSON *json, int totalcnt); //json free function
+void result(JSON *json, int totalcnt); //json string result print function
 void categoryPrint(JSON *json, char category[10]); //category 종류대로 print function
 
 char* readfile(char* filename, int* filesize)
@@ -304,7 +308,7 @@ void freeJson(JSON *json, int totalcnt){
     }
 }
 
-void printResult(JSON *json, int totalcnt) {
+void result(JSON *json, int totalcnt) {
     char *typetype;
     for(int i = 0; i<totalcnt; i++){
         if(json->tokens[i].type == 0) typetype = "JSMN_UNDEFINED";
@@ -328,7 +332,7 @@ int main(int argc, char** argv)
 
     JSON json = {0, };
     json_parse(doc, filesize, &json, &totalcnt);
-    printResult(&json, totalcnt);
+    result(&json, totalcnt);
     
     char category[10];
     printf("당신이 원하는 category는 무엇입니까? 입력하세요:");
