@@ -29,7 +29,18 @@ void object_parse(char*, JSON*, int*, int*); //object parsing function
 void json_parse(char *doc, int size, JSON *json, int *b_cnt); //json parsing function
 void freeJson(JSON *json, int totalcnt); //json free function
 void result(JSON *json, int totalcnt); //json string result print function
-void categoryPrint(JSON *json, char category[10]); //category 종류대로 print function
+
+void categoryPrint(JSON *json, char category[10], int totalcnt);
+
+void getDoneNo(char *doc, JSON *json, int *initialPos, int *initialTokenIndex);
+void getDoneYes(char *doc, JSON *json, int *initialPos, int *initialTokenIndex);
+void printDone(JSON *json, int totalcnt);
+
+void print_importance1(JSON *json, int totalcnt);
+void print_importance2(JSON *json, int totalcnt);
+void print_importance3(JSON *json, int totalcnt);
+void print_importance4(JSON *json, int totalcnt);
+void print_importance5(JSON *json, int totalcnt);
 
 char* readfile(char* filename, int* filesize)
 {
@@ -102,7 +113,7 @@ void array_parse(char *doc, JSON *json, int *initialPos, int *initialTokenIndex)
             object_parse(doc, json, &pos, &tokenIndex);
             break;
 
-	case '-': case '0': case '1': case '2':
+        case '-': case '0': case '1': case '2':
         case '3': case '4': case '5': case '6':
         case '7': case '8': case '9': case 't':
         case 'f': case 'n':
@@ -178,7 +189,7 @@ void object_parse(char *doc, JSON *json, int *initialPos, int *initialTokenIndex
             tokenIndex++; //increase tokenIndex for element found insdie array
             break;
 
-	case '[':
+        case '[':
             objSize++;
             array_parse(doc, json, &pos, &tokenIndex);
             break;
@@ -265,14 +276,14 @@ void json_parse(char *doc, int size, JSON *json, int *b_cnt)
            	break;
 
              
-             case '[':
-		array_parse(doc, json, &pos, &tokenIndex);
+            case '[':
+                array_parse(doc, json, &pos, &tokenIndex);
                 break;
 
 
-	     case '{':
-             	object_parse(doc, json, &pos, &tokenIndex);
-		break;
+            case '{':
+                object_parse(doc, json, &pos, &tokenIndex);
+                break;
 
             case '-': case '0': case '1': case '2': case '3': case '4':
             case '5': case '6': case '7': case '8': case '9':
@@ -332,28 +343,253 @@ int main(int argc, char** argv)
 
     JSON json = {0, };
     json_parse(doc, filesize, &json, &totalcnt);
-    result(&json, totalcnt);
+    //result(&json, totalcnt);
     
-    char category[10];
-    printf("당신이 원하는 category는 무엇입니까? 입력하세요:");
-    scanf("%s", category);
-    categoryPrint(&json, category);
-    
+    char select = ' ';
+    do{
+        printf("a: 카테고리\n");
+        printf("b: 이행여부\n");
+        printf("c: 중요도\n");
+        printf("원하시는 메뉴 번호를 입력하세요(q를 입력하면 종료됩니다.): ");
+        scanf("%c", &select);
+        getchar();
+       
+            switch (select) {
+                case 'a':
+                    printf("\n");
+                    char category[10];
+                    printf("당신이 원하는 category는 무엇입니까? 입력하세요: ");
+                    scanf("%s", category);
+                    categoryPrint(&json, category, totalcnt);
+                    printf("\n");
+                    getchar();
+                    break;
+                    
+                case 'b':
+                    printf("\n");
+                    char implement = ' ';
+                    printf("어떤 것을 프린트하기 원하나요?\n");
+                    printf("a. 이행한 것\n");
+                    printf("b. 이행하지 못한 것\n");
+                    scanf("%c",&implement);
+                    getchar();
+
+                    if(implement == 'a')
+                    {
+                        getDoneYes(doc, filesize, &json, &totalcnt);
+                        printDone(&json, totalcnt);
+                    }
+                    
+                    else if(implement == 'b')
+                    {
+                        getDoneNo(doc, filesize, &json, &totalcnt);
+                        printDone(&json, totalcnt);
+                    }
+                    printf("\n");
+                    break;
+                    
+                case 'c':
+                    printf("\n");
+                    char importance= ' ';
+                    printf("input the number for selecting importance (1~5): ");
+                    scanf("%c",&importance);
+                    getchar();
+                        switch(importance)
+                        {
+                        case '1':
+                            print_importance1(&json, totalcnt);
+                            break;
+                        case '2':
+                            print_importance2(&json, totalcnt);
+                            break;
+                        case '3':
+                            print_importance3(&json, totalcnt);
+                            break;
+                        case '4':
+                            print_importance4(&json, totalcnt);
+                            break;
+                        case '5':
+                            print_importance5(&json, totalcnt);
+                            break;
+                        default:
+                            printf("default" );
+                            break;
+                        }
+                    printf("\n");
+                    break;
+                    
+                default:
+                    break;
+            }
+        
+    }while(select !='q');
+
     freeJson(&json, totalcnt);
     return 0;
 }
 
-void categoryPrint(JSON *json,char category[10]){
-    if(!strcmp(category, "faith"))
-       printf("%s\n",json->tokens[4].string);
-    else if(!strcmp(category, "experience"))
-        printf("%s\n",json->tokens[139].string);
-    else if(!strcmp(category, "book"))
-        printf("%s\n",json->tokens[302].string);
-    else if(!strcmp(category, "travel"))
-        printf("%s\n",json->tokens[479].string);
-    else if(!strcmp(category, "food"))
-        printf("%s\n",json->tokens[593].string);
-    else
-        printf("입력하신 category의 list가 없습니다.\n");
+void categoryPrint(JSON *json,char category[10], int totalcnt){
+    for(int i = 0; i<totalcnt; i++){
+        if(strcmp(json->tokens[i].string,category)==0)
+            printf("%s\n", json->tokens[i+1].string);
+    }
+}
+
+void getDoneNo(char *doc, JSON *json, int *initialPos, int *initialTokenIndex){
+    int pos = *initialPos;
+    int tokenIndex = *initialTokenIndex;
+    int s, e;
+    int objtokenIndex = tokenIndex;
+    tokenIndex++;
+    s = pos;
+    json->tokens[objtokenIndex].start = s;
+    int objSize = 0;
+    int totalcnt=0;
+    
+    while (doc[pos] != ']')
+    {
+        pos++;
+        switch (doc[pos])
+        {
+            case '{':
+                totalcnt++;//object의 개수
+                s = pos + 1;
+                pos++;
+                json->tokens[tokenIndex].start = s;
+                
+                while(doc[pos] != ':')//첫번째 :
+                {
+                    pos++;
+                }
+                pos++;
+                while(doc[pos] != ':')//두번째 :
+                {
+                    pos++;
+                }
+                pos++;
+                while(doc[pos] != ':')//세번째 :
+                {
+                    pos++;
+                }
+                pos++;
+                while(doc[pos] != '"'){//no전 " 까지 증가시키기
+                    pos++;
+                }
+                pos++;//n or y
+                if(doc[pos] != 'n')//n으로 시작하지않으면 return;
+                    return;
+                
+                while (doc[pos] != '}'){
+                    pos++;
+                }
+                e = pos;
+                json->tokens[tokenIndex].end = e;
+                
+                json->tokens[tokenIndex].string = (char *)malloc(e - s + 1);
+                memset(json->tokens[tokenIndex].string, 0, e - s + 1);
+                memcpy(json->tokens[tokenIndex].string, doc + s, e - s);
+                
+                break;
+        }
+    }
+}
+
+void getDoneYes(char *doc, JSON *json, int *initialPos, int *initialTokenIndex){
+    int pos = *initialPos;
+    int tokenIndex = *initialTokenIndex;
+    int s, e;
+    int objtokenIndex = tokenIndex;
+    tokenIndex++;
+    s = pos;
+    json->tokens[objtokenIndex].start = s;
+    int objSize = 0;
+    int totalcnt=0;
+    
+    while (doc[pos] != ']')
+    {
+        pos++;
+        switch (doc[pos])
+        {
+            case '{':
+                totalcnt++;//object의 개수
+                s = pos + 1;
+                pos++;
+                json->tokens[tokenIndex].start = s;
+                
+                while(doc[pos] != ':')//첫번째 :
+                {
+                    pos++;
+                }
+                pos++;
+                while(doc[pos] != ':')//두번째 :
+                {
+                    pos++;
+                }
+                pos++;
+                while(doc[pos] != ':')//세번째 :
+                {
+                    pos++;
+                }
+                pos++;
+                while(doc[pos] != '"'){     //yes전 " 까지 증가시키기
+                    pos++;
+                }
+                pos++;//y or n
+                if(doc[pos] != 'y')//y으로 시작하지않으면 return;
+                    return;
+                
+                while (doc[pos] != '}'){
+                    pos++;
+                }
+                e = pos;
+                json->tokens[tokenIndex].end = e;
+                
+                json->tokens[tokenIndex].string = (char *)malloc(e - s + 1);
+                memset(json->tokens[tokenIndex].string, 0, e - s + 1);
+                memcpy(json->tokens[tokenIndex].string, doc + s, e - s);
+                
+                break;
+        }
+    }
+}
+
+void printDone(JSON *json, int totalcnt) {
+    for(int i = 0; i<totalcnt; i++){
+        printf("%s \n", json->tokens[i].string);
+    }
+}
+
+void print_importance1(JSON *json, int totalcnt) {
+    for(int i = 0; i<totalcnt; i++){
+        if(strcmp(json->tokens[i].string,"★☆☆☆☆")==0)
+            printf("%s\n", json->tokens[i-4].string);
+    }
+}
+
+void print_importance2(JSON *json, int totalcnt) {
+    for(int i = 0; i<totalcnt; i++){
+        if(strcmp(json->tokens[i].string,"★★☆☆☆")==0)
+            printf("%s\n", json->tokens[i-4].string);
+    }
+}
+
+void print_importance3(JSON *json, int totalcnt) {
+    for(int i = 0; i<totalcnt; i++){
+        if(strcmp(json->tokens[i].string,"★★★☆☆")==0)
+            printf("%s\n", json->tokens[i-4].string);
+    }
+}
+
+void print_importance4(JSON *json, int totalcnt) {
+    for(int i = 0; i<totalcnt; i++){
+        if(strcmp(json->tokens[i].string,"★★★★☆")==0)
+            printf("%s\n", json->tokens[i-4].string);
+    }
+}
+
+void print_importance5(JSON *json, int totalcnt) {
+    for(int i = 0; i<totalcnt; i++){
+        if(strcmp(json->tokens[i].string,"★★★★★")==0)
+            printf("%s\n", json->tokens[i-4].string);
+    }
 }
