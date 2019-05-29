@@ -1,253 +1,355 @@
-#include <stdio.h>     
-#include <stdlib.h>    
-#include <stdbool.h>  
-#include <string.h>  
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#define TOKEN_COUNT 1024
 
-typedef enum _TOKEN_TYPE {
-    TOKEN_STRING,
-    TOKEN_NUMBER,
-    TOKEN_BOOLEAN
-} TOKEN_TYPE;
+typedef enum {
+    UNDEFINED = 0,
+    OBJECT = 1,
+    ARRAY = 2,
+    STRING = 3,
+    PRIMITIVE = 4
+}type_t;
 
-typedef struct _TOKEN {
-    TOKEN_TYPE type;  
-    union {    
-        char *string;  
-        double number; 
-    };
-    bool isArray;
-    bool val_bool;
-} TOKEN;
+typedef struct {
+    type_t type;
+    int start;
+    int end;
+    int size;
+    char *string;
+}tok_t;
 
-#define TOKEN_COUNT 30 //토큰의 최대 크기
-
-typedef struct _JSON {
-    TOKEN tokens[TOKEN_COUNT];
+typedef struct _JSON{
+    tok_t tokens[TOKEN_COUNT];
 } JSON;
 
-char *readFile(char *filename, int *readSize)    
+void array_parse(char*, JSON*, int*, int*); //array parsing function
+void object_parse(char*, JSON*, int*, int*); //object parsing function
+void categoryPrint(JSON *json, char category[10]); //category 종류대로 print function
+
+char* readfile(char* filename, int* filesize)
 {
-    FILE *fp = fopen(filename, "r");
-    if (fp == NULL)
+    FILE* fp = fopen(filename, "r");
+    if (fp ==  NULL){
         return NULL;
+    }
 
     int size;
-    char *buffer;
+    char* buffer;
 
     fseek(fp, 0, SEEK_END);
     size = ftell(fp);
     fseek(fp, 0, SEEK_SET);
+    buffer = (char*)malloc(size+1);
+    memset(buffer, 0, size+1);
 
-    buffer = malloc(size + 1);
-    memset(buffer, 0, size + 1);
-
-    if (fread(buffer, size, 1, fp) < 1)
-    {
-        *readSize = 0;
+    if(fread(buffer,1, size, fp)<1){
+        *filesize = 0;
         free(buffer);
         fclose(fp);
         return NULL;
     }
 
-    *readSize = size;
-    fclose(fp);    
+    *filesize = size;
+    fclose(fp);
     return buffer;
 }
 
-void parseJSON(char *doc, int size, JSON *json)    // JSON 파싱 함수
+void array_parse(char *doc, JSON *json, int *initialPos, int *initialTokenIndex)
 {
-    int tokenIndex = 0;    
-    int pos = 0;           
-    if (doc[pos] != '{')   //object case
-        return;
-    pos++;  
+    int pos = *initialPos;
+    int tokenIndex = *initialTokenIndex;
+    int s, e;
+    int arraytokenIndex = tokenIndex;        
+    json->tokens[tokenIndex].type = ARRAY;   
+    tokenIndex++;                            
+    s = pos;                                
+    json->tokens[arraytokenIndex].start = s; 
+    int arrSize = 0;
+    while (doc[pos] != ']')
+    { 
+        pos++;
+        switch (doc[pos])
+        {
+        case '"':
+            arrSize++;                              
+            json->tokens[tokenIndex].type = STRING; 
+            s = pos + 1;                            
+            json->tokens[tokenIndex].start = s;     
+            while (doc[pos + 1] != '"'){
+                pos++;
+            }
+            e = ++pos;                        
+            json->tokens[tokenIndex].end = e;  
+            json->tokens[tokenIndex].size = 0; 
+            json->tokens[tokenIndex].string = (char *)malloc(e - s + 1);
+            memset(json->tokens[tokenIndex].string, 0, e - s + 1);
+            memcpy(json->tokens[tokenIndex].string, doc + s, e - s);
+            tokenIndex++; //increase tokenIndex for element found insdie array
+            break;
 
-    while (pos < size)      
+        case '[':
+            arrSize++;
+            array_parse(doc, json, &pos, &tokenIndex);
+            break;
+
+        case '{':
+            arrSize++;
+            object_parse(doc, json, &pos, &tokenIndex);
+            break;
+
+	case '-': case '0': case '1': case '2':
+        case '3': case '4': case '5': case '6':
+        case '7': case '8': case '9': case 't':
+        case 'f': case 'n':
+            arrSize++;
+            json->tokens[tokenIndex].type = PRIMITIVE;
+            s = pos;
+            json->tokens[tokenIndex].start = s;
+            while (doc[pos + 1] != ','){
+                if (doc[pos + 1] == '\n') break;
+                else pos++;
+            }
+            e = ++pos; // the word ends when doc[pos] meets ',' or NULL
+            json->tokens[tokenIndex].end = e;
+            json->tokens[tokenIndex].size = 0;
+            json->tokens[tokenIndex].string = (char *)malloc(e - s + 1);
+            memset(json->tokens[tokenIndex].string, 0, e - s + 1);
+            memcpy(json->tokens[tokenIndex].string, doc + s, e - s);
+            pos++;
+            tokenIndex++;
+            break;
+
+        default:
+            break;
+        }
+    }
+    e = ++pos;
+    json->tokens[arraytokenIndex].end = e;
+    json->tokens[arraytokenIndex].size = arrSize;
+    json->tokens[arraytokenIndex].string = (char *)malloc(e - json->tokens[arraytokenIndex].start + 1);
+    memset(json->tokens[arraytokenIndex].string, 0, e - json->tokens[arraytokenIndex].start + 1);
+    memcpy(json->tokens[arraytokenIndex].string, doc + json->tokens[arraytokenIndex].start, e - json->tokens[arraytokenIndex].start);
+    *initialTokenIndex = tokenIndex;
+    *initialPos = pos;
+}
+
+void object_parse(char *doc, JSON *json, int *initialPos, int *initialTokenIndex)
+{   
+    int pos = *initialPos;
+    int tokenIndex = *initialTokenIndex;
+    int s, e;
+    int objtokenIndex = tokenIndex; 
+    json->tokens[tokenIndex].type = OBJECT; 
+    tokenIndex++;                           
+    s = pos;                                
+    json->tokens[objtokenIndex].start = s;  
+    int objSize = 0;
+    
+    while (doc[pos] != '}')
+    { 
+        pos++;
+        switch (doc[pos])
+        {
+        case '"':
+            json->tokens[tokenIndex].type = STRING;
+            s = pos + 1;                          
+            pos++;
+            json->tokens[tokenIndex].start = s;     
+            while (doc[pos] != '"'){
+                pos++;
+            }
+            e = pos;                         
+            json->tokens[tokenIndex].end = e;  
+            json->tokens[tokenIndex].size = 0; 
+            while (doc[pos] != ':' && doc[pos] != '\n'){
+                pos++;
+            }
+            if (doc[pos] == ':') json->tokens[tokenIndex].size = 1;
+            else objSize++;
+
+            json->tokens[tokenIndex].string = (char *)malloc(e - s + 1);
+            memset(json->tokens[tokenIndex].string, 0, e - s + 1);
+            memcpy(json->tokens[tokenIndex].string, doc + s, e - s);
+            tokenIndex++; //increase tokenIndex for element found insdie array
+            break;
+
+	case '[':
+            objSize++;
+            array_parse(doc, json, &pos, &tokenIndex);
+            break;
+
+        case '{':
+            objSize++;
+            object_parse(doc, json, &pos, &tokenIndex);
+            break;
+
+        case '-': case '0': case '1': case '2':
+        case '3': case '4': case '5': case '6':
+        case '7': case '8': case '9': case 't':
+        case 'f': case 'n':
+            json->tokens[tokenIndex].type = PRIMITIVE;
+            s = pos;
+            json->tokens[tokenIndex].start = s;
+            while (doc[pos + 1] != ','){
+                if (doc[pos + 1] == '\n') break;
+                else pos++;
+            }
+            objSize++;
+            e = ++pos; // the word ends when doc[pos] meets ',' or NULL
+            json->tokens[tokenIndex].end = e;
+            json->tokens[tokenIndex].size = 0;
+            json->tokens[tokenIndex].string = (char *)malloc(e - s + 1);
+            memset(json->tokens[tokenIndex].string, 0, e - s + 1);
+            memcpy(json->tokens[tokenIndex].string, doc + s, e - s);
+            pos++;
+            tokenIndex++;
+            break;
+
+        default:
+            break;
+
+        }
+    }
+    e = ++pos;
+    json->tokens[objtokenIndex].end = e;
+    json->tokens[objtokenIndex].size = objSize;
+    //put doc[s]~doc[e+1] in token.string for the array
+    json->tokens[objtokenIndex].string = (char *)malloc(e - json->tokens[objtokenIndex].start + 1);
+    memset(json->tokens[objtokenIndex].string, 0, e - json->tokens[objtokenIndex].start + 1);
+    memcpy(json->tokens[objtokenIndex].string, doc + json->tokens[objtokenIndex].start, e - json->tokens[objtokenIndex].start);
+    *initialTokenIndex = tokenIndex;
+    *initialPos = pos;
+}
+
+void json_parse(char *doc, int size, JSON *json, int *b_cnt)
+{
+    int cnt = 0;
+    int pos = 0; //for checking position in doc.
+    int e,s; //ending, starting position for each token
+    int tokenIndex = 0; //index for token
+
+    while(pos < size)
     {
-        switch (doc[pos])   
+        switch(doc[pos])
         {
-        case '"':        //string case 
-        {
-            char *begin = doc + pos + 1;
-            char *end = strchr(begin, '"');
-            if (end == NULL)    
-                break;          
-            int stringLength = end - begin;  
+            case '"':
+            	json->tokens[tokenIndex].type = STRING; // token.type is STRING
+            	s = pos + 1;
+            	pos++;                                   // the word starts after "
+            	json->tokens[tokenIndex].start = s;     // token.start = s
+            	while (doc[pos] != '"'){ 
+            	    pos++;
+            	}
 
-            json->tokens[tokenIndex].type = TOKEN_STRING;
-            json->tokens[tokenIndex].string = malloc(stringLength + 1);
-            memset(json->tokens[tokenIndex].string, 0, stringLength + 1);
+            	e = pos;                        // the word ends when doc[pos] meets ". (includes last ")
+            	json->tokens[tokenIndex].end = e; // token.end = e
+            	json->tokens[tokenIndex].size = 0; //if : is coming right after "" {size = 1}
+            	while (doc[pos] != ':' && doc[pos] != '\n') {
+            	    pos++;
+            	}
+            	if (doc[pos] != ':')
+            	{ // else {size = 0}
+            	    json->tokens[tokenIndex].size = 1;
+            	}
+            	json->tokens[tokenIndex].string = (char *)malloc(e - s + 1);
+            	memset(json->tokens[tokenIndex].string, 0, e - s + 1);
+            	memcpy(json->tokens[tokenIndex].string, doc + s, e - s);
+	
+                pos++;
+           	tokenIndex++;
+           	break;
 
-            memcpy(json->tokens[tokenIndex].string, begin, stringLength);
-            tokenIndex++;
-            pos = pos + stringLength + 1;
-        }
-        break;
+             
+             case '[':
+		array_parse(doc, json, &pos, &tokenIndex);
+                break;
 
-        case '[':     //array case
-        {
-            pos++;    
 
-            while (doc[pos] != ']')   
-            {
-                if (doc[pos] == '"')  
-                {
-                    char *begin = doc + pos + 1;
-                    char *end = strchr(begin, '"');
-                    if (end == NULL)  
-                        break;      
-                    int stringLength = end - begin;  
+	     case '{':
+             	object_parse(doc, json, &pos, &tokenIndex);
+		break;
 
-                    json->tokens[tokenIndex].type = TOKEN_STRING;
-                    json->tokens[tokenIndex].string = malloc(stringLength + 1);
-                    json->tokens[tokenIndex].isArray = true;
-                    memset(json->tokens[tokenIndex].string, 0, stringLength + 1);
-                    memcpy(json->tokens[tokenIndex].string, begin, stringLength);
-                    tokenIndex++;
-
-                    pos = pos + stringLength + 1; 
+            case '-': case '0': case '1': case '2': case '3': case '4':
+            case '5': case '6': case '7': case '8': case '9':
+            case 't': case 'f': case 'n':
+                json->tokens[tokenIndex].type = PRIMITIVE;
+                s = pos;
+                json->tokens[tokenIndex].start = s;
+                while(doc[pos+1] != ',') { 
+                    if(doc[pos+1] == '\n') break;
+                    else pos++;
                 }
-                pos++;    // 다음 문자로
-            }
+                e = ++pos; 
+                json->tokens[tokenIndex].end = e;
+                json->tokens[tokenIndex].size = 0;
+                json->tokens[tokenIndex].string = (char *)malloc(e-s+1);
+                memset(json->tokens[tokenIndex].string, 0, e-s+1);
+                memcpy(json->tokens[tokenIndex].string, doc+s, e-s);
+                pos++;
+                tokenIndex++;
+                break;            
+
+            default:
+             pos++;
         }
-        break;
+    }
+    *b_cnt = tokenIndex;
+}
 
-        case '0': case '1': case '2': case '3': case '4': case '5': //number case 
-        case '6': case '7': case '8': case '9': case '-':         
-        {
-            char *begin = doc + pos;
-            char *end;
-            char *buffer;
-            end = strchr(doc + pos, ',');
-            if (end == NULL)
-            {
-                end = strchr(doc + pos, '}');
-                if (end == NULL)   
-                    break;       
-            }
-            int stringLength = end - begin;   
-
-            buffer = malloc(stringLength + 1);
-            memset(buffer, 0, stringLength + 1);
-            memcpy(buffer, begin, stringLength);
-            json->tokens[tokenIndex].type = TOKEN_NUMBER;  
-            json->tokens[tokenIndex].number = atof(buffer);
-            
-	    free(buffer); 
-            tokenIndex++;  
-            pos = pos + stringLength + 1; 
-        }
-        break;
-
-        case 't' : //true case
-        {
-            char *begin = doc + pos;
-            char *end;
-            char *buffer;
-
-            end = strchr(doc + pos, ',');
-            if (end == NULL)
-            {
-                end = strchr(doc + pos, '}');
-                if (end == NULL)   
-                    break;     
-            }
-            int stringLength = end - begin; 
-
-            buffer = malloc(stringLength + 1);
-            memset(buffer, 0, stringLength + 1);
-            memcpy(buffer, begin, stringLength);
-
-            if(strncmp(buffer,"true",0)==0){
-            json->tokens[tokenIndex].type = TOKEN_BOOLEAN;  
-            json->tokens[tokenIndex].val_bool = true;
-            json->tokens[tokenIndex].string = malloc(stringLength + 1);
-            memset(json->tokens[tokenIndex].string, 0, stringLength + 1);
-            memcpy(json->tokens[tokenIndex].string, begin, stringLength);
-            }
-
-            free(buffer);  
-            tokenIndex++; 
-            pos = pos + stringLength + 1; 
-        }
-        break;
-
-        case 'f' : //false case
-        {
-            char *begin = doc + pos;
-            char *end;
-            char *buffer;
-
-            end = strchr(doc + pos, ',');
-            if (end == NULL)
-            {
-                end = strchr(doc + pos, '}');
-                if (end == NULL)  
-                    break;   
-            }
-            int stringLength = end - begin;
-
-            buffer = malloc(stringLength + 1);
-            memset(buffer, 0, stringLength + 1);
-            memcpy(buffer, begin, stringLength);
-
-            if(strncmp(buffer,"false",0)==0){
-            json->tokens[tokenIndex].type = TOKEN_BOOLEAN;  
-            json->tokens[tokenIndex].val_bool = false;       
-            json->tokens[tokenIndex].string = malloc(stringLength + 1);
-            memset(json->tokens[tokenIndex].string, 0, stringLength + 1);
-            memcpy(json->tokens[tokenIndex].string, begin, stringLength);
-            }
-            free(buffer); 
-            tokenIndex++;
-            pos = pos + stringLength + 1;  
-        }
-        break;
-        }
-        pos++; // 다음 문자로
+void freeJson(JSON *json, int totalcnt){
+    for (int i = 0; i<totalcnt; i++){
+        if (json->tokens[i].type == STRING)
+            free(json->tokens[i].string);
     }
 }
 
-void freeJSON(JSON *json)    // JSON 해제 함수
-{
-    for (int i = 0; i < TOKEN_COUNT; i++)          
-    {
-        if (json->tokens[i].type == TOKEN_STRING)  
-            free(json->tokens[i].string);       
+void printResult(JSON *json, int totalcnt) {
+    char *typetype;
+    for(int i = 0; i<totalcnt; i++){
+        if(json->tokens[i].type == 0) typetype = "JSMN_UNDEFINED";
+        else if(json->tokens[i].type == 1) typetype = "JSMN_OBJECT";
+        else if(json->tokens[i].type == 2) typetype ="JSMN_ARRAY";
+        else if(json->tokens[i].type == 3) typetype ="JSMN_STRING";
+        else typetype = "JSMN_PRIMITIVE";
+        printf("[%02d] %s (size=%d, %d~%d, %s)\n", i, json->tokens[i].string, json->tokens[i].size, json->tokens[i].start, json->tokens[i].end, typetype);
     }
 }
 
 int main(int argc, char** argv)
 {
-    int size; 
-    char *doc = readFile(argv[1], &size);
-    if (doc == NULL)
+    int filesize=0;
+    char* doc = readfile(argv[1], &filesize);
+    int totalcnt=0;
+
+    if(doc == NULL){
         return -1;
+    }
 
-    JSON json = { 0, };  
-    parseJSON(doc, size, &json);    
-
-    printf("%s\n", json.tokens[0].string);            
-    printf("%s\n", json.tokens[1].string);        
-    printf("%s\n", json.tokens[2].string);            
-    printf("%s\n", json.tokens[3].string);
-    printf("%s\n", json.tokens[4].string);           
-    printf("%s\n", json.tokens[5].string);  
-    printf("%s\n", json.tokens[6].string);           
-    printf("%s\n", json.tokens[7].string);
-    printf("%s\n", json.tokens[8].string);           
-    printf("%s\n", json.tokens[9].string);
-    printf("%s\n", json.tokens[10].string); 
-    printf("%s\n", json.tokens[11].string);           
-    printf("%s\n", json.tokens[12].string);
-    printf("%s\n", json.tokens[13].string);           
-    printf("%s\n", json.tokens[14].string);            
-    printf("%s\n", json.tokens[15].string);            
-    printf("%s\n", json.tokens[16].string);   
-    printf("%s\n", json.tokens[17].string);    
-    printf("%f\n", json.tokens[18].number);
-   
-    freeJSON(&json);   
-    free(doc);
+    JSON json = {0, };
+    json_parse(doc, filesize, &json, &totalcnt);
+    printResult(&json, totalcnt);
+    
+    char category[10];
+    printf("당신이 원하는 category는 무엇입니까? 입력하세요:");
+    scanf("%s", category);
+    categoryPrint(&json, category);
+    
+    freeJson(&json, totalcnt);
     return 0;
+}
+
+void categoryPrint(JSON *json,char category[10]){
+    if(!strcmp(category, "faith"))
+       printf("%s\n",json->tokens[4].string);
+    else if(!strcmp(category, "experience"))
+        printf("%s\n",json->tokens[139].string);
+    else if(!strcmp(category, "book"))
+        printf("%s\n",json->tokens[302].string);
+    else if(!strcmp(category, "travel"))
+        printf("%s\n",json->tokens[479].string);
+    else if(!strcmp(category, "food"))
+        printf("%s\n",json->tokens[593].string);
+    else
+        printf("입력하신 category의 list가 없습니다.\n");
 }
