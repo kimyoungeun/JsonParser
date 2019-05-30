@@ -32,9 +32,8 @@ void result(JSON *json, int totalcnt); //json string result print function
 
 void categoryPrint(JSON *json, char category[10], int totalcnt);
 
-void getDoneNo(char *doc, JSON *json, int *initialPos, int *initialTokenIndex);
-void getDoneYes(char *doc, JSON *json, int *initialPos, int *initialTokenIndex);
-void printDone(JSON *json, int totalcnt);
+void printDoneYes(JSON *json, int totalcnt);
+void printDoneNo(JSON *json, int totalcnt);
 
 void print_importance1(JSON *json, int totalcnt);
 void print_importance2(JSON *json, int totalcnt);
@@ -343,10 +342,11 @@ int main(int argc, char** argv)
 
     JSON json = {0, };
     json_parse(doc, filesize, &json, &totalcnt);
-    //result(&json, totalcnt);
+    result(&json, totalcnt);
     
     char select = ' ';
     do{
+        printf("\n");
         printf("a: 카테고리\n");
         printf("b: 이행여부\n");
         printf("c: 중요도\n");
@@ -376,14 +376,12 @@ int main(int argc, char** argv)
 
                     if(implement == 'a')
                     {
-                        getDoneYes(doc, filesize, &json, &totalcnt);
-                        printDone(&json, totalcnt);
+                        printDoneYes(&json, totalcnt);
                     }
                     
                     else if(implement == 'b')
                     {
-                        getDoneNo(doc, filesize, &json, &totalcnt);
-                        printDone(&json, totalcnt);
+                        printDoneNo(&json, totalcnt);
                     }
                     printf("\n");
                     break;
@@ -435,127 +433,17 @@ void categoryPrint(JSON *json,char category[10], int totalcnt){
     }
 }
 
-void getDoneNo(char *doc, JSON *json, int *initialPos, int *initialTokenIndex){
-    int pos = *initialPos;
-    int tokenIndex = *initialTokenIndex;
-    int s, e;
-    int objtokenIndex = tokenIndex;
-    tokenIndex++;
-    s = pos;
-    json->tokens[objtokenIndex].start = s;
-    int objSize = 0;
-    int totalcnt=0;
-    
-    while (doc[pos] != ']')
-    {
-        pos++;
-        switch (doc[pos])
-        {
-            case '{':
-                totalcnt++;//object의 개수
-                s = pos + 1;
-                pos++;
-                json->tokens[tokenIndex].start = s;
-                
-                while(doc[pos] != ':')//첫번째 :
-                {
-                    pos++;
-                }
-                pos++;
-                while(doc[pos] != ':')//두번째 :
-                {
-                    pos++;
-                }
-                pos++;
-                while(doc[pos] != ':')//세번째 :
-                {
-                    pos++;
-                }
-                pos++;
-                while(doc[pos] != '"'){//no전 " 까지 증가시키기
-                    pos++;
-                }
-                pos++;//n or y
-                if(doc[pos] != 'n')//n으로 시작하지않으면 return;
-                    return;
-                
-                while (doc[pos] != '}'){
-                    pos++;
-                }
-                e = pos;
-                json->tokens[tokenIndex].end = e;
-                
-                json->tokens[tokenIndex].string = (char *)malloc(e - s + 1);
-                memset(json->tokens[tokenIndex].string, 0, e - s + 1);
-                memcpy(json->tokens[tokenIndex].string, doc + s, e - s);
-                
-                break;
-        }
-    }
-}
-
-void getDoneYes(char *doc, JSON *json, int *initialPos, int *initialTokenIndex){
-    int pos = *initialPos;
-    int tokenIndex = *initialTokenIndex;
-    int s, e;
-    int objtokenIndex = tokenIndex;
-    tokenIndex++;
-    s = pos;
-    json->tokens[objtokenIndex].start = s;
-    int objSize = 0;
-    int totalcnt=0;
-    
-    while (doc[pos] != ']')
-    {
-        pos++;
-        switch (doc[pos])
-        {
-            case '{':
-                totalcnt++;//object의 개수
-                s = pos + 1;
-                pos++;
-                json->tokens[tokenIndex].start = s;
-                
-                while(doc[pos] != ':')//첫번째 :
-                {
-                    pos++;
-                }
-                pos++;
-                while(doc[pos] != ':')//두번째 :
-                {
-                    pos++;
-                }
-                pos++;
-                while(doc[pos] != ':')//세번째 :
-                {
-                    pos++;
-                }
-                pos++;
-                while(doc[pos] != '"'){     //yes전 " 까지 증가시키기
-                    pos++;
-                }
-                pos++;//y or n
-                if(doc[pos] != 'y')//y으로 시작하지않으면 return;
-                    return;
-                
-                while (doc[pos] != '}'){
-                    pos++;
-                }
-                e = pos;
-                json->tokens[tokenIndex].end = e;
-                
-                json->tokens[tokenIndex].string = (char *)malloc(e - s + 1);
-                memset(json->tokens[tokenIndex].string, 0, e - s + 1);
-                memcpy(json->tokens[tokenIndex].string, doc + s, e - s);
-                
-                break;
-        }
-    }
-}
-
-void printDone(JSON *json, int totalcnt) {
+void printDoneYes(JSON *json, int totalcnt) {
     for(int i = 0; i<totalcnt; i++){
-        printf("%s \n", json->tokens[i].string);
+        if(strcmp(json->tokens[i].string,"yes")==0)
+            printf("%s\n", json->tokens[i-6].string);
+    }
+}
+
+void printDoneNo(JSON *json, int totalcnt) {
+    for(int i = 0; i<totalcnt; i++){
+        if(strcmp(json->tokens[i].string,"no")==0)
+            printf("%s\n", json->tokens[i-6].string);
     }
 }
 

@@ -6,9 +6,7 @@ Making a Json Parser
 
 ## Memebers
 권장근
-
 김영은
-
 김연수
 
 ## Project Functions & Results
@@ -24,6 +22,6 @@ C language
 ## Directions for use
 
 ```
-gcc json.c -o json
-./json example.json
+gcc json.c -o json.exe
+./json.exe example.json
 ```
