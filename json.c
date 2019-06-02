@@ -347,13 +347,17 @@ int main(int argc, char** argv)
     json_parse(doc, filesize, &json, &totalcnt);
     result(&json, totalcnt);
     
+    printf("\n-----------------Token Print End-----------------\n");
+    printf("\nBucket List Manager\n");
+    printf("It will help you mange bucket list efficiently\n");
     char select = ' ';
     do{
         printf("\n");
-        printf("a: 카테고리\n");
-        printf("b: 이행여부\n");
+        printf("Menu List\n");
+        printf("a: 버킷리스트 검색\n");
+        printf("b: 카테고리\n");
         printf("c: 중요도\n");
-        printf("d: 버킷리스트 검색\n");
+        printf("d: 이행여부\n");
         printf("원하시는 메뉴 번호를 입력하세요(q를 입력하면 종료됩니다.): ");
         scanf("%c", &select);
         getchar();
@@ -361,39 +365,22 @@ int main(int argc, char** argv)
             switch (select) {
                 case 'a':
                     printf("\n");
+                    char search[100];
+                    printf("list에서 찾고자하는 항목을 입력하세요: ");
+                    fgets(search, sizeof(search), stdin);
+                    search[strlen(search)-1] ='\0';
+                    searchValue(&json, search, totalcnt);
+                    printf("\n");
+                    break;
+                    
+                case 'b':
+                    printf("\n");
                     char category[10];
                     printf("당신이 원하는 category는 무엇입니까? 입력하세요: ");
                     scanf("%s", category);
                     categoryPrint(&json, category, totalcnt);
                     printf("\n");
                     getchar();
-                    break;
-                    
-                case 'b':
-                    printf("\n");
-                    char implement = ' ';
-                    printf("어떤 것을 프린트하기 원하나요?\n");
-                    printf("a. 이행한 것\n");
-                    printf("b. 이행하지 못한 것\n");
-                    printf("c. 이행률\n");
-                    scanf("%c",&implement);
-                    getchar();
-
-                    if(implement == 'a')
-                    {
-                        printDoneYes(&json, totalcnt);
-                    }
-                    
-                    else if(implement == 'b')
-                    {
-                        printDoneNo(&json, totalcnt);
-                    }
-                    else if(implement == 'c')
-                    {
-                        printf("\n");
-                        print_yes_proportion(&json, totalcnt);
-                    }
-                    printf("\n");
                     break;
                     
                 case 'c':
@@ -428,11 +415,28 @@ int main(int argc, char** argv)
                     
                 case 'd':
                     printf("\n");
-                    char search[100];
-                    printf("list에서 찾고자하는 항목을 입력하세요: ");
-                    fgets(search, sizeof(search), stdin);
-                    search[strlen(search)-1] ='\0';
-                    searchValue(&json, search, totalcnt);
+                    char implement = ' ';
+                    printf("어떤 것을 프린트하기 원하나요?\n");
+                    printf("a. 이행한 것\n");
+                    printf("b. 이행하지 못한 것\n");
+                    printf("c. 이행률\n");
+                    scanf("%c",&implement);
+                    getchar();
+                    
+                    if(implement == 'a')
+                    {
+                        printDoneYes(&json, totalcnt);
+                    }
+                    
+                    else if(implement == 'b')
+                    {
+                        printDoneNo(&json, totalcnt);
+                    }
+                    else if(implement == 'c')
+                    {
+                        printf("\n");
+                        print_yes_proportion(&json, totalcnt);
+                    }
                     printf("\n");
                     break;
 
@@ -441,7 +445,9 @@ int main(int argc, char** argv)
             }
         
     }while(select !='q');
-
+    printf("\nProgram End\n");
+    printf("We always support your dream:)\n\n");
+    
     freeJson(&json, totalcnt);
     return 0;
 }
