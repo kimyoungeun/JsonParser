@@ -31,6 +31,7 @@ void freeJson(JSON *json, int totalcnt); //json free function
 void result(JSON *json, int totalcnt); //json string result print function
 
 void categoryPrint(JSON *json, char category[10], int totalcnt);
+void searchValue(JSON *json,char search[100], int totalcnt);
 
 void printDoneYes(JSON *json, int totalcnt);
 void printDoneNo(JSON *json, int totalcnt);
@@ -40,6 +41,8 @@ void print_importance2(JSON *json, int totalcnt);
 void print_importance3(JSON *json, int totalcnt);
 void print_importance4(JSON *json, int totalcnt);
 void print_importance5(JSON *json, int totalcnt);
+
+void print_yes_proportion(JSON *json, int totalcnt);
 
 char* readfile(char* filename, int* filesize)
 {
@@ -350,6 +353,7 @@ int main(int argc, char** argv)
         printf("a: 카테고리\n");
         printf("b: 이행여부\n");
         printf("c: 중요도\n");
+        printf("d: 버킷리스트 검색\n");
         printf("원하시는 메뉴 번호를 입력하세요(q를 입력하면 종료됩니다.): ");
         scanf("%c", &select);
         getchar();
@@ -371,6 +375,7 @@ int main(int argc, char** argv)
                     printf("어떤 것을 프린트하기 원하나요?\n");
                     printf("a. 이행한 것\n");
                     printf("b. 이행하지 못한 것\n");
+                    printf("c. 이행률\n");
                     scanf("%c",&implement);
                     getchar();
 
@@ -382,6 +387,11 @@ int main(int argc, char** argv)
                     else if(implement == 'b')
                     {
                         printDoneNo(&json, totalcnt);
+                    }
+                    else if(implement == 'c')
+                    {
+                        printf("\n");
+                        print_yes_proportion(&json, totalcnt);
                     }
                     printf("\n");
                     break;
@@ -416,6 +426,16 @@ int main(int argc, char** argv)
                     printf("\n");
                     break;
                     
+                case 'd':
+                    printf("\n");
+                    char search[100];
+                    printf("list에서 찾고자하는 항목을 입력하세요: ");
+                    fgets(search, sizeof(search), stdin);
+                    search[strlen(search)-1] ='\0';
+                    searchValue(&json, search, totalcnt);
+                    printf("\n");
+                    break;
+
                 default:
                     break;
             }
@@ -430,6 +450,13 @@ void categoryPrint(JSON *json,char category[10], int totalcnt){
     for(int i = 0; i<totalcnt; i++){
         if(strcmp(json->tokens[i].string,category)==0)
             printf("%s\n", json->tokens[i+1].string);
+    }
+}
+
+void searchValue(JSON *json,char search[100], int totalcnt){
+    for(int i = 0; i<totalcnt; i++){
+        if(strcmp(json->tokens[i].string,search)==0)
+            printf("%s\n", json->tokens[i-2].string);
     }
 }
 
@@ -480,4 +507,22 @@ void print_importance5(JSON *json, int totalcnt) {
         if(strcmp(json->tokens[i].string,"★★★★★")==0)
             printf("%s\n", json->tokens[i-4].string);
     }
+}
+
+void print_yes_proportion(JSON *json, int totalcnt){
+    float total_count=0;
+    float yes_count=0;
+    float proportion=0;
+    char percent='%';
+    for(int i = 0; i<totalcnt; i++){
+        if(strcmp(json->tokens[i].string,"yes")==0
+           || strcmp(json->tokens[i].string,"no")==0)
+            total_count++;
+        if(strcmp(json->tokens[i].string,"yes")==0)
+            yes_count++;
+    }
+    proportion=(yes_count/total_count)*100;
+    printf("total yes and no is %.0f\n",total_count);
+    printf("yes number is %.0f\n",yes_count);
+    printf("yes proportion is %.1f%c\n",proportion,percent);
 }
